@@ -100,10 +100,3 @@ const Game = function(player1Name, player2Name, player1Marker, player2Marker) {
 
     return {playRound, getCurrentPlayerName, getCurrentPlayerMarker, getCurrentTurn, isGameOver};
 };
-
-const game = Game("Aman", "Tara", MARKER_X, MARKER_O);
-
-while (game.getCurrentTurn() < 10 && !game.isGameOver()) {
-    let index = prompt("Select index to place marker");
-    game.playRound(index);
-}
