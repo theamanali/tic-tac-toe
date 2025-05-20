@@ -53,8 +53,6 @@ winnerDialog.addEventListener("click", (e) => {
     }
 })
 
-
-
 const displayController = function () {
     const startGameForm = document.querySelector(".startGameForm")
     const playerOneInput    = document.querySelector("#playerOneName");
