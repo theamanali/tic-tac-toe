@@ -29,7 +29,12 @@ gridContainer.addEventListener("click", (e) => {
     game.playRound(spotIndex);
     
     if (game.isGameOver()) {
-        displayController.showWinnerDialog(game.getCurrentPlayerName());
+        if (game.getCurrentTurn() < 10) {
+            displayController.showWinnerDialog(game.getCurrentPlayerName());
+        }
+        else {
+            displayController.showWinnerDialog(game.getCurrentPlayerName(), true);
+        }
     }
     else {
         displayController.setTurnHeader(game.getCurrentPlayerName(), game.getCurrentTurn());
@@ -263,6 +268,7 @@ const Game = function(player1Name, player2Name) {
         getCurrentPlayerMarker,
         getCurrentTurn,
         isGameOver,
-        resetGame
+        resetGame,
+        checkWin
     };
 };
