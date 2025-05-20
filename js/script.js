@@ -26,7 +26,7 @@ gridContainer.addEventListener("click", (e) => {
     game.playRound(spotIndex);
     
     if (game.isGameOver()) {
-        if (game.getCurrentTurn() < 10) {
+        if (game.getCurrentTurn() <= 9) {
             displayController.showWinnerDialog(game.getCurrentPlayerName());
         }
         else {
@@ -39,8 +39,6 @@ gridContainer.addEventListener("click", (e) => {
 });
 
 winnerDialog.addEventListener("click", (e) => {
-    const target = e.target;
-    
     if (e.target.classList.contains("restart-button-same")) {
         game.resetGame();
         displayController.resetGameDisplay();
@@ -59,16 +57,19 @@ winnerDialog.addEventListener("click", (e) => {
 
 const displayController = function () {
     const startGameForm = document.querySelector(".startGameForm")
-    const startGameButton = document.querySelector("#startGameButton");
+    const playerOneInput    = document.querySelector("#playerOneName");
+    const playerTwoInput    = document.querySelector("#playerTwoName");
     const gameGridContainer = document.querySelector(".grid-container");
+    const spots = gameGridContainer.childNodes;
     const gameTurnHeader = document.querySelector(".player-turn");
     const gameDisplay = document.querySelector(".game-container");
     const winnerDialog = document.querySelector(".winner-dialog");
     const winnerText = document.querySelector(".winner-text");
     
+    
     function hideStartGameForm() {
-        document.querySelector("#playerOneName").textContent = "";
-        document.querySelector("#playerTwoName").textContent = "";
+        playerOneInput.value = "";
+        playerTwoInput.value = "";
         startGameForm.classList.add("hidden")
     }
     
@@ -100,7 +101,6 @@ const displayController = function () {
     }
     
     function resetGameDisplay() {
-        const spots = gameGridContainer.childNodes;
         spots.forEach((spot) => spot.textContent = "");
         
         setTurnHeader(game.getCurrentPlayerName(), game.getCurrentTurn());
@@ -118,40 +118,6 @@ const displayController = function () {
     
     return {hideStartGameForm, showStartGameForm, hideGame, showGame, setTurnHeader, displayMarker, resetGameDisplay, showWinnerDialog, hideWinnerDialog};
 }()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const GameBoard = (function() {
     let gameBoard = ["", "", "", "", "", "", "", "", ""];
@@ -268,6 +234,5 @@ const Game = function(player1Name, player2Name) {
         getCurrentTurn,
         isGameOver,
         resetGame,
-        checkWin
     };
 };
