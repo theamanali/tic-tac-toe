@@ -6,7 +6,7 @@ factory functions), minimal globals, and a clean UI.
 
 ## 🚀 Try it out
 ![Tic Tac Toe screenshot](./img/screenshot.png)
-[🔗 View Live](https://github.com/theamanali/tic-tac-toe)
+[🔗 View Live](https://theamanali.github.io/tic-tac-toe/)
 
 ## ✨ Features
 - Custom Player Names: Enter names (or default to “X” / “O”)  
