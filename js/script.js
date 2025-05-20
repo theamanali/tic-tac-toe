@@ -24,8 +24,10 @@ gridContainer.addEventListener("click", (e) => {
 
     displayController.displayMarker(game.getCurrentPlayerMarker(), spot)
     game.playRound(spotIndex);
-    
+
+    console.log(game.isGameOver())
     if (game.isGameOver()) {
+        console.log(game.isGameOver())
         if (game.getCurrentTurn() <= 9 || game.checkWin()) {
             displayController.showWinnerDialog(game.getCurrentPlayerName());
         }
@@ -90,7 +92,7 @@ const displayController = function () {
             winnerText.textContent = "It's a draw!"
         }
         else {
-            winnerText.textContent = winnerName + " won the game!"
+            winnerText.textContent = `${winnerName} won the game in ${game.getCurrentTurn() - 1} turns!`
         }
     }
 
@@ -216,7 +218,10 @@ const Game = function(player1Name, player2Name) {
     }
 
     function isGameOver() {
-        return isOver;
+        if (currentTurn >= 10) {
+            return true;
+        }
+        else return isOver;
     }
 
     function resetGame() {
