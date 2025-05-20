@@ -16,9 +16,6 @@ startGameButton.addEventListener("click", () => {
     displayController.hideStartGameForm();
     displayController.showGame();
     displayController.setTurnHeader(game.getCurrentPlayerName(), game.getCurrentTurn());
-    
-    document.querySelector("#playerOneName").textContent = "";
-    document.querySelector("#playerTwoName").textContent = "";
 });
 
 gridContainer.addEventListener("click", (e) => {
@@ -70,6 +67,8 @@ const displayController = function () {
     const winnerText = document.querySelector(".winner-text");
     
     function hideStartGameForm() {
+        document.querySelector("#playerOneName").textContent = "";
+        document.querySelector("#playerTwoName").textContent = "";
         startGameForm.classList.add("hidden")
     }
     
