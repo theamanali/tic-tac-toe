@@ -26,7 +26,7 @@ gridContainer.addEventListener("click", (e) => {
     game.playRound(spotIndex);
     
     if (game.isGameOver()) {
-        if (game.getCurrentTurn() <= 9) {
+        if (game.getCurrentTurn() <= 9 || game.checkWin()) {
             displayController.showWinnerDialog(game.getCurrentPlayerName());
         }
         else {
@@ -232,5 +232,6 @@ const Game = function(player1Name, player2Name) {
         getCurrentTurn,
         isGameOver,
         resetGame,
+        checkWin
     };
 };
