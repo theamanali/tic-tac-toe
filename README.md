@@ -1,9 +1,12 @@
 # Tic Tac Toe ❌⭕️
 
-A browser-based Tic Tac Toe game built with HTML, CSS, and JavaScript as part of a JavaScript course. Implements modular code (IIFE & factory functions), minimal globals, and a clean UI.
+A browser-based Tic Tac Toe game built with HTML, CSS, and JavaScript as 
+part of The Odin Project's JavaScript course. Implements modular code (IIFE & 
+factory functions), minimal globals, and a clean UI.
 
 ## 🚀 Try it out
 ![Tic Tac Toe screenshot](./img/screenshot.png)
+[🔗 View Live](https://github.com/theamanali/tic-tac-toe)
 
 ## ✨ Features
 - Custom Player Names: Enter names (or default to “X” / “O”)  
