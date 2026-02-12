@@ -1,0 +1,46 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, sans-serif;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background: white;
+
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 36px;
+
+    background: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 0 0 auto;
+}
+
+header h1 {
+    font-size: 3rem;
+}
+
+.basicButton {
+    border: none;
+    background: white;
+    color: black;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 48px;
+    cursor: pointer;
+}
+
+.basicButton:hover {
+    transform: scale(1.05);
+}
