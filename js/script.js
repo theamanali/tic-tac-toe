@@ -41,8 +41,27 @@ const createPlayer = (name, marker) => {
     return {getName, getMarker, setName, toggleMarker};
 }
 
-const player1 = createPlayer("Aman", MARKER_X);
-const player2 = createPlayer("Tara", MARKER_O);
+const Game = function(player1Name, player2Name) {
+    const player1 = createPlayer(player1Name, MARKER_X);
+    const player2 = createPlayer(player2Name, MARKER_O);
+
+    //IIFE for GameBoard
+    const GameBoard = (() => {
+        let gameBoard = Array(9).fill("");
+
+        function placeMarker(marker, index) {
+            gameBoard[index] = marker;
+        }
+
+        function reset() {
+            gameBoard = Array(9).fill("");
+        }
+
+        return {reset, placeMarker}
+    })();
+
+
+}
 
 
 
