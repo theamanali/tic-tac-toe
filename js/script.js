@@ -47,14 +47,16 @@ const Game = function(player1Name, player2Name) {
 
     //IIFE for GameBoard
     const GameBoard = (() => {
-        let gameBoard = Array(9).fill("");
+        let gameBoard = Array(9).fill(null);
 
         function placeMarker(marker, index) {
-            gameBoard[index] = marker;
+            if (gameBoard[index] === null) {
+                gameBoard[index] = marker;
+            }
         }
 
         function reset() {
-            gameBoard = Array(9).fill("");
+            gameBoard = Array(9).fill(null);
         }
 
         return {reset, placeMarker}
