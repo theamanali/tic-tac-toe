@@ -18,7 +18,7 @@ const createPlayer = (name, marker) => {
             }
         }
         else {
-            currentName = name[0].toUpperCase() + name.toLowerCase().slice(1)
+            currentName = name[0].toUpperCase() + name.toLowerCase().slice(1);
         }
     }
 
@@ -45,6 +45,10 @@ const Game = function(player1Name, player2Name) {
     const player1 = createPlayer(player1Name, MARKER_X);
     const player2 = createPlayer(player2Name, MARKER_O);
 
+    let currentPlayer = player1;
+    let currentTurn = 1;
+    let isOver = false;
+
     //IIFE for GameBoard
     const GameBoard = (() => {
         let gameBoard = Array(9).fill(null);
@@ -52,6 +56,12 @@ const Game = function(player1Name, player2Name) {
         function placeMarker(marker, index) {
             if (gameBoard[index] === null) {
                 gameBoard[index] = marker;
+                console.log(gameBoard);
+                return true;
+            }
+            else {
+                console.log(gameBoard);
+                return false;
             }
         }
 
@@ -62,8 +72,41 @@ const Game = function(player1Name, player2Name) {
         return {reset, placeMarker}
     })();
 
+    function playRound(index) {
+        console.log(`${currentPlayer.getName()} places at ${index}`);
+        if (GameBoard.placeMarker(currentPlayer.getMarker(), index)) {
+            if (currentPlayer === player1) {
+                currentPlayer = player2;
+            }
+            else currentPlayer = player1;
 
+            currentTurn++;
+        }
+
+        if (currentTurn === 9) {
+            isOver = true;
+        }
+
+        console.log(currentPlayer.getName() + "'s turn");
+    }
+
+    function checkWinner() {
+
+    }
+
+    console.log("Welcome to the game! It is " + player1.getName() + "'s turn.");
+
+    return {playRound};
 }
+
+const game = Game("Aman", "Tara");
+
+game.playRound(1);
+game.playRound(5);
+game.playRound(2);
+game.playRound(2);
+game.playRound(3);
+game.playRound(0);
 
 
 
