@@ -111,8 +111,6 @@ const Game = function(player1Name, player2Name) {
     return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName};
 }
 
-const game = Game("Aman", "Tara");
-
 
 
 
