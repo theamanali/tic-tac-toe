@@ -94,19 +94,24 @@ const Game = function(player1Name, player2Name) {
 
     }
 
+    function isGameOver() {
+        return isOver;
+    }
+
+    function getTurn() {
+        return currentTurn;
+    }
+
+    function getCurrentPlayerName() {
+        return currentPlayer.getName();
+    }
+
     console.log("Welcome to the game! It is " + player1.getName() + "'s turn.");
 
-    return {playRound};
+    return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName};
 }
 
 const game = Game("Aman", "Tara");
-
-game.playRound(1);
-game.playRound(5);
-game.playRound(2);
-game.playRound(2);
-game.playRound(3);
-game.playRound(0);
 
 
 
