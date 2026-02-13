@@ -14,5 +14,41 @@
             <button class="basicButton">Project Repo</button>
         </a>
     </header>
+    <main>
+        <dialog class="winner-dialog">
+            <h2 class="winner-text"></h2>
+            <button type="button" class="restart-button-same">Play Again</button>
+            <button type="button" class="restart-button-differ">Play Again (new players)</button>
+        </dialog>
+
+        <div class="game-container hidden">
+            <h2 class="player-turn">Aman's Turn!</h2>
+            <div class="grid-container">
+                <div id="1"></div>
+                <div id="2"></div>
+                <div id="3"></div>
+                <div id="4"></div>
+                <div id="5"></div>
+                <div id="6"></div>
+                <div id="7"></div>
+                <div id="8"></div>
+                <div id="9"></div>
+            </div>
+        </div>
+
+        <form class="startGameForm">
+            <div>
+                <div>
+                    <label for="playerOneName">Player One Name</label>
+                    <input type="text" id="playerOneName" name="playerOneName">
+                </div>
+                <div>
+                    <label for="playerTwoName">Player Two Name</label>
+                    <input type="text" id="playerTwoName" name="playerTwoName">
+                </div>
+            </div>
+            <button type="button" id="startGameButton">Start Game</button>
+        </form>
+    </main>
 </body>
 </html>

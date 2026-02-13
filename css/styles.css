@@ -7,40 +7,142 @@
 
 html, body {
     height: 100%;
-}
-
-body {
-    background: white;
 
     display: flex;
     flex-direction: column;
 }
 
 header {
+    flex: 0 0 auto;
+    background: black;
+    color: white;
     padding: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    cursor: pointer;
+    padding: 16px;
+    border-radius: 24px;
+    font-size: 1.2rem;
+    background-color: white;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+main {
+    display: flex;
+    flex: 1 1 auto;
+    overflow: auto;
+}
+
+.startGameForm {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
 
     background: black;
     color: white;
-    display: flex;
+    padding: 36px;
+    border-radius: 24px;
+
     align-items: center;
-    justify-content: space-between;
-    flex: 0 0 auto;
 }
 
-header h1 {
-    font-size: 3rem;
+.startGameForm > div {
+    display: flex;
+    gap: 36px;
 }
 
-.basicButton {
-    border: none;
-    background: white;
-    color: black;
-    padding: 12px;
-    font-size: 1rem;
+.startGameForm > div > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+label {
+    font-size: 1.5rem;
+}
+
+input[type="text"] {
+    border-radius: 24px;
+    height: 36px;
+    padding: 8px;
+
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.hidden { display: none !important; }
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    width: 600px;
+    height: 600px;
+
+    background-color: black;
+
     border-radius: 48px;
-    cursor: pointer;
 }
 
-.basicButton:hover {
-    transform: scale(1.05);
+.grid-container > div {
+    border: 1px solid white;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    font-style: italic;
+}
+
+.player-turn {
+    align-self: center;
+    font-size: 2rem;
+}
+
+.winner-dialog {
+    display: none;
+}
+
+.winner-dialog[open] {
+    margin: auto;
+    padding: 24px;
+    border-radius: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    column-gap: 24px;
+    border: none;
+}
+
+.winner-dialog > button {
+    border: 3px solid black;
+}
+
+.winner-text {
+    align-self: center;
+    grid-column: 1 / -1;
+}
+
+::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
 }
