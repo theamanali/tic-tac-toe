@@ -56,11 +56,9 @@ const Game = function(player1Name, player2Name) {
         function placeMarker(marker, index) {
             if (gameBoard[index] === null) {
                 gameBoard[index] = marker;
-                console.log(gameBoard);
                 return true;
             }
             else {
-                console.log(gameBoard);
                 return false;
             }
         }
@@ -73,7 +71,6 @@ const Game = function(player1Name, player2Name) {
     })();
 
     function playRound(index) {
-        console.log(`${currentPlayer.getName()} places at ${index}`);
         if (GameBoard.placeMarker(currentPlayer.getMarker(), index)) {
             if (currentPlayer === player1) {
                 currentPlayer = player2;
@@ -86,8 +83,6 @@ const Game = function(player1Name, player2Name) {
         if (currentTurn === 9) {
             isOver = true;
         }
-
-        console.log(currentPlayer.getName() + "'s turn");
     }
 
     function checkWinner() {
@@ -105,11 +100,27 @@ const Game = function(player1Name, player2Name) {
     function getCurrentPlayerName() {
         return currentPlayer.getName();
     }
-
-    console.log("Welcome to the game! It is " + player1.getName() + "'s turn.");
-
     return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName};
 }
+
+const form = document.querySelector(".startGameForm");
+const gameContainer = document.querySelector(".game-container");
+
+let game;
+
+document.querySelector("#startGameButton").addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const player1Name = formData.get("playerOneName");
+    const player2Name = formData.get("playerTwoName");
+
+    game = new Game(player1Name, player2Name);
+
+    form.reset();
+    form.classList.add("hidden");
+    gameContainer.classList.remove("hidden");
+})
 
 
 
