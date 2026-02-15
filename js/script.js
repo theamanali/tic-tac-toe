@@ -105,10 +105,11 @@ const Game = function(player1Name, player2Name) {
 
 const form = document.querySelector(".startGameForm");
 const gameContainer = document.querySelector(".game-container");
+const startGameButton = document.querySelector("#startGameButton");
 
 let game;
 
-document.querySelector("#startGameButton").addEventListener("click", (e) => {
+startGameButton.addEventListener("click", (e) => {
     e.preventDefault();
 
     const formData = new FormData(form);
