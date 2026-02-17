@@ -42,6 +42,8 @@ const createPlayer = (name, marker) => {
 }
 
 const Game = function(player1Name, player2Name) {
+    const winningCombos = new Set();
+
     const player1 = createPlayer(player1Name, MARKER_X);
     const player2 = createPlayer(player2Name, MARKER_O);
 
@@ -86,7 +88,9 @@ const Game = function(player1Name, player2Name) {
     }
 
     function checkWinner() {
-
+        if () {
+            isOver = true;
+        }
     }
 
     function isGameOver() {
