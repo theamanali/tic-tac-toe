@@ -80,7 +80,7 @@ const Game = function(player1Name, player2Name) {
             currentTurn++;
         }
 
-        if (currentTurn === 9) {
+        if (currentTurn === 9 || checkWinner()) {
             isOver = true;
         }
     }
@@ -103,24 +103,45 @@ const Game = function(player1Name, player2Name) {
     return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName};
 }
 
+const createDisplayController = ((form, gameContainer, turnHeader) => {
+
+    const setVisible = (el, visible) => el.classList.toggle("hidden", !visible);
+
+    return {
+        showGameBoard: () => setVisible(gameContainer, true),
+        hideGameBoard: () => setVisible(gameContainer, false),
+        showStartGameForm: () => setVisible(form, true),
+        hideStartGameForm: () => {
+            form.reset();
+            setVisible(form, false);
+        },
+        setTurnHeader: (name, turn) => {
+            turnHeader.textContent = `Turn ${turn}: ${name}`;
+        }
+    };
+});
+
+const startGameButton = document.querySelector("#startGameButton");
 const form = document.querySelector(".startGameForm");
 const gameContainer = document.querySelector(".game-container");
-const startGameButton = document.querySelector("#startGameButton");
+const turnHeader = document.querySelector(".player-turn");
 
+const displayController = createDisplayController(form, gameContainer, turnHeader);
 let game;
 
 startGameButton.addEventListener("click", (e) => {
     e.preventDefault();
 
     const formData = new FormData(form);
+    console.log(formData.get("playerOneName"));
     const player1Name = formData.get("playerOneName");
     const player2Name = formData.get("playerTwoName");
 
     game = new Game(player1Name, player2Name);
 
-    form.reset();
-    form.classList.add("hidden");
-    gameContainer.classList.remove("hidden");
+    displayController.hideStartGameForm();
+    displayController.showGameBoard();
+    displayController.setTurnHeader(game.getCurrentPlayerName(), 1);
 })
 
 
