@@ -17,7 +17,10 @@ startGameButton.addEventListener("click", (e) => {
     const player1Name = formData.get("playerOneName");
     const player2Name = formData.get("playerTwoName");
 
-    game = new Game(player1Name, player2Name);
+    const player1 = createPlayer(player1Name, MARKER_X);
+    const player2 = createPlayer(player2Name, MARKER_O);
+
+    game = new Game(player1, player2);
 
     DisplayController.hideStartGameForm();
     DisplayController.showGameBoard();
@@ -34,7 +37,6 @@ gameContainer.addEventListener("click", (e) => {
     if (game.checkWinner()) {
         game.toggleIsOver();
 
-
         DisplayController.changeWinnerDialogHeader(game.getCurrentPlayerName(), game.getTurn());
         DisplayController.shoeWinnerDialog();
     }
@@ -47,7 +49,14 @@ winnerDialog.addEventListener("click", (e) => {
     e.preventDefault();
 
     if (e.target.classList.contains("restart-button-same")) {
+        game.resetGame(true);
 
+        DisplayController.hideWinnerDialog();
+        DisplayController.clearGameBoard();
+
+        console.log(game.getCurrentPlayerName());
+        console.log(game.getTurn());
+        DisplayController.setTurnHeader(game.getCurrentPlayerName(), game.getTurn());
     }
 })
 
@@ -91,12 +100,9 @@ const createPlayer = (name, marker) => {
     return {getName, getMarker, setName, toggleMarker};
 }
 
-const Game = function(player1Name, player2Name) {
+const Game = function(player1, player2) {
     const winningCombos = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8],
         [0,4,8], [2,4,6]]
-
-    const player1 = createPlayer(player1Name, MARKER_X);
-    const player2 = createPlayer(player2Name, MARKER_O);
 
     let currentPlayer = player1;
     let currentTurn = 1;
@@ -174,24 +180,45 @@ const Game = function(player1Name, player2Name) {
         return currentPlayer.getMarker();
     }
 
-    function resetGame(withNewPlayers) {
+    function resetGame(withSamePlayers) {
+        if (withSamePlayers) {
+            if (currentPlayer === player1) {
+                currentPlayer = player2;
+            }
+            else currentPlayer = player1;
 
+            currentTurn = 1;
+            isOver = false;
+            GameBoard.reset();
+        }
+        else {
+
+        }
     }
 
-    return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName, getCurrentPlayerMarker, toggleIsOver};
+    return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName, getCurrentPlayerMarker, toggleIsOver, resetGame};
 }
 
 const DisplayController = (() => {
+    const divContainer = gameContainer.querySelector(".div-container");
+    const cells = divContainer.querySelectorAll("div");
+
     const setVisible = (element, visible) => element.classList.toggle("hidden", !visible);
 
     return {
         showGameBoard: () => setVisible(gameContainer, true),
         hideGameBoard: () => setVisible(gameContainer, false),
         showStartGameForm: () => setVisible(form, true),
+        clearGameBoard: () => {
+            cells.forEach(cell => {
+                cell.textContent = "";
+            })
+        },
         changeWinnerDialogHeader (name, turn) {
             winnerText.textContent = `${name} won the game in ${turn} turns`;
         },
         shoeWinnerDialog: () => {winnerDialog.showModal()},
+        hideWinnerDialog: () => {winnerDialog.close()},
         hideStartGameForm: () => {
             form.reset();
             setVisible(form, false);
