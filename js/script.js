@@ -38,10 +38,14 @@ gameContainer.addEventListener("click", (e) => {
         game.toggleIsOver();
 
         DisplayController.changeWinnerDialogHeader(game.getCurrentPlayerName(), game.getTurn());
-        DisplayController.shoeWinnerDialog();
+        DisplayController.showWinnerDialog();
     }
     else {
         DisplayController.setTurnHeader(game.getCurrentPlayerName(), game.getTurn());
+        if (game.isGameOver()) {
+            DisplayController.setDrawDialogHeader();
+            DisplayController.showWinnerDialog();
+        }
     }
 })
 
@@ -220,9 +224,12 @@ const DisplayController = (() => {
 
         },
         changeWinnerDialogHeader (name, turn) {
-            winnerText.textContent = `${name} won the game in ${turn} turns`;
+            winnerText.textContent = `${name} won the game in ${turn} turns!`;
         },
-        shoeWinnerDialog: () => {winnerDialog.showModal()},
+        setDrawDialogHeader () {
+            winnerText.textContent = `It's a draw!`;
+        },
+        showWinnerDialog: () => {winnerDialog.showModal()},
         hideWinnerDialog: () => {winnerDialog.close()},
         hideStartGameForm: () => {
             form.reset();
