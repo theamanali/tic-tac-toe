@@ -6,6 +6,7 @@ const form = document.querySelector(".startGameForm");
 const gameContainer = document.querySelector(".game-container");
 const turnHeader = document.querySelector(".player-turn");
 const winnerDialog = document.querySelector(".winner-dialog");
+const winnerText = document.querySelector(".winner-text");
 
 let game;
 
@@ -43,6 +44,8 @@ gameContainer.addEventListener("click", (e) => {
         DisplayController.setTurnHeader(game.getCurrentPlayerName(), game.getTurn());
     }
 })
+
+
 
 /**
  * Player factory.
@@ -236,8 +239,7 @@ const DisplayController = (() => {
         hideGameBoard: () => setVisible(gameContainer, false),
         showStartGameForm: () => setVisible(form, true),
         changeWinnerDialogHeader (name, turn) {
-            console.log(winnerDialog.childNodes[0]);
-            winnerDialog.childNodes[0].textContent = `${name} won the game in ${turn} turns`;
+            winnerText.textContent = `${name} won the game in ${turn} turns`;
         },
         shoeWinnerDialog: () => {winnerDialog.showModal()},
         hideStartGameForm: () => {
