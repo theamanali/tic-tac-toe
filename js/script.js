@@ -200,7 +200,7 @@ const Game = function(player1, player2) {
         return currentPlayer.getMarker();
     }
 
-    // Starts a fresh round and alternates who begins.
+    // Starts a fresh round and alternate who begins.
     function resetGame() {
         if (currentPlayer === player1) {
             currentPlayer = player2;
