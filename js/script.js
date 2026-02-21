@@ -31,7 +31,7 @@ gameContainer.addEventListener("click", (e) => {
     e.preventDefault();
 
     const index = Number(e.target.id);
-    e.target.textContent = game.getCurrentPlayerMarker()
+    DisplayController.placeMarker(index);
     game.playRound(index);
 
     if (game.checkWinner()) {
@@ -53,9 +53,6 @@ winnerDialog.addEventListener("click", (e) => {
 
         DisplayController.hideWinnerDialog();
         DisplayController.clearGameBoard();
-
-        console.log(game.getCurrentPlayerName());
-        console.log(game.getTurn());
         DisplayController.setTurnHeader(game.getCurrentPlayerName(), game.getTurn());
     }
 })
@@ -213,6 +210,14 @@ const DisplayController = (() => {
             cells.forEach(cell => {
                 cell.textContent = "";
             })
+        },
+        placeMarker: (index) => {
+            const cell = cells[index];
+
+            if (cell.textContent === "") {
+                cell.textContent = game.getCurrentPlayerMarker()
+            }
+
         },
         changeWinnerDialogHeader (name, turn) {
             winnerText.textContent = `${name} won the game in ${turn} turns`;
