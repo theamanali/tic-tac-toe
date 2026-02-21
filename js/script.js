@@ -30,13 +30,13 @@ startGameButton.addEventListener("click", (e) => {
 gameContainer.addEventListener("click", (e) => {
     e.preventDefault();
 
+    if (!game || game.isGameOver()) return;
+
     const index = Number(e.target.id);
     DisplayController.placeMarker(index);
     game.playRound(index);
 
     if (game.checkWinner()) {
-        game.toggleIsOver();
-
         DisplayController.changeWinnerDialogHeader(game.getCurrentPlayerName(), game.getTurn());
         DisplayController.showWinnerDialog();
     }
@@ -49,17 +49,29 @@ gameContainer.addEventListener("click", (e) => {
     }
 })
 
-winnerDialog.addEventListener("click", (e) => {
+winnerDialog.addEventListener("cancel", (e) => {
     e.preventDefault();
 
-    if (e.target.classList.contains("restart-button-same")) {
-        game.resetGame(true);
+    game.resetGame()
+    DisplayController.hideWinnerDialog();
+    DisplayController.clearGameBoard();
+    DisplayController.setTurnHeader(game.getCurrentPlayerName(), game.getTurn());
+});
 
+winnerDialog.addEventListener("click", (e) => {
+    if (e.target.classList.contains("restart-button-same")) {
+        game.resetGame()
         DisplayController.hideWinnerDialog();
         DisplayController.clearGameBoard();
         DisplayController.setTurnHeader(game.getCurrentPlayerName(), game.getTurn());
     }
-})
+    else if (e.target.classList.contains("restart-button-differ")) {
+        DisplayController.hideWinnerDialog();
+        DisplayController.clearGameBoard();
+        DisplayController.hideGameBoard();
+        DisplayController.showStartGameForm();
+    }
+});
 
 const createPlayer = (name, marker) => {
     let currentName = "";
@@ -181,20 +193,15 @@ const Game = function(player1, player2) {
         return currentPlayer.getMarker();
     }
 
-    function resetGame(withSamePlayers) {
-        if (withSamePlayers) {
-            if (currentPlayer === player1) {
-                currentPlayer = player2;
-            }
-            else currentPlayer = player1;
-
-            currentTurn = 1;
-            isOver = false;
-            GameBoard.reset();
+    function resetGame() {
+        if (currentPlayer === player1) {
+            currentPlayer = player2;
         }
-        else {
+        else currentPlayer = player1;
 
-        }
+        currentTurn = 1;
+        isOver = false;
+        GameBoard.reset();
     }
 
     return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName, getCurrentPlayerMarker, toggleIsOver, resetGame};
