@@ -10,6 +10,7 @@ const winnerText = document.querySelector(".winner-text");
 
 let game;
 
+// Bootstrap a new game from form input and render the game UI.
 startGameButton.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -27,6 +28,7 @@ startGameButton.addEventListener("click", (e) => {
     DisplayController.setTurnHeader(game.getCurrentPlayerName(), 1);
 })
 
+// Handle board clicks: place a marker, resolve win/draw, then update UI text.
 gameContainer.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -58,6 +60,7 @@ winnerDialog.addEventListener("cancel", (e) => {
     DisplayController.setTurnHeader(game.getCurrentPlayerName(), game.getTurn());
 });
 
+// Dialog actions support both "same players" restart and "new players" restart.
 winnerDialog.addEventListener("click", (e) => {
     if (e.target.classList.contains("restart-button-same")) {
         game.resetGame()
@@ -73,6 +76,7 @@ winnerDialog.addEventListener("click", (e) => {
     }
 });
 
+// Player factory keeps name/marker state private and exposes a small API.
 const createPlayer = (name, marker) => {
     let currentName = "";
     let currentMarker = "";
@@ -114,6 +118,7 @@ const createPlayer = (name, marker) => {
 }
 
 const Game = function(player1, player2) {
+    // Every 3-cell index combination that wins on a 3x3 board.
     const winningCombos = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8],
         [0,4,8], [2,4,6]]
 
@@ -121,6 +126,7 @@ const Game = function(player1, player2) {
     let currentTurn = 1;
     let isOver = false;
 
+    // Internal board module (encapsulated so only Game controls board writes).
     const GameBoard = (() => {
         let gameBoard = Array(9).fill(null);
 
@@ -145,6 +151,7 @@ const Game = function(player1, player2) {
         return {reset, placeMarker, getBoard};
     })();
 
+    // Applies the current player's move and advances game state when valid.
     function playRound(index) {
         if (GameBoard.placeMarker(currentPlayer.getMarker(), index)) {
             if (currentTurn === 9 || checkWinner()) {
@@ -193,6 +200,7 @@ const Game = function(player1, player2) {
         return currentPlayer.getMarker();
     }
 
+    // Starts a fresh round and alternates who begins.
     function resetGame() {
         if (currentPlayer === player1) {
             currentPlayer = player2;
@@ -207,6 +215,7 @@ const Game = function(player1, player2) {
     return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName, getCurrentPlayerMarker, toggleIsOver, resetGame};
 }
 
+// Display-only helpers that keep DOM concerns separate from game rules.
 const DisplayController = (() => {
     const divContainer = gameContainer.querySelector(".div-container");
     const cells = divContainer.querySelectorAll("div");
@@ -247,7 +256,6 @@ const DisplayController = (() => {
         }
     };
 })();
-
 
 
 
