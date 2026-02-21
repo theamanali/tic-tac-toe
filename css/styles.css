@@ -91,7 +91,7 @@ input[type="text"] {
     gap: 8px;
 }
 
-.grid-container {
+.div-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
@@ -104,7 +104,7 @@ input[type="text"] {
     border-radius: 48px;
 }
 
-.grid-container > div {
+.div-container > div {
     border: 1px solid white;
     color: white;
     display: flex;

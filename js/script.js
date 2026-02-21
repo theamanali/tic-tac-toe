@@ -1,6 +1,62 @@
 const MARKER_X = "X"
 const MARKER_O = "O"
 
+const startGameButton = document.querySelector("#startGameButton");
+const form = document.querySelector(".startGameForm");
+const gameContainer = document.querySelector(".game-container");
+const turnHeader = document.querySelector(".player-turn");
+const winnerDialog = document.querySelector(".winner-dialog");
+
+let game;
+
+// Starts a new game from form input and updates the UI.
+startGameButton.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const player1Name = formData.get("playerOneName");
+    const player2Name = formData.get("playerTwoName");
+
+    game = new Game(player1Name, player2Name);
+
+    DisplayController.hideStartGameForm();
+    DisplayController.showGameBoard();
+    DisplayController.setTurnHeader(game.getCurrentPlayerName(), 1);
+})
+
+// Handles board clicks, applies a move, and checks for a winner.
+gameContainer.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const index = Number(e.target.id);
+    e.target.textContent = game.getCurrentPlayerMarker()
+    game.playRound(index);
+
+    if (game.checkWinner()) {
+        game.toggleIsOver();
+
+
+        DisplayController.changeWinnerDialogHeader(game.getCurrentPlayerName(), game.getTurn());
+        DisplayController.shoeWinnerDialog();
+    }
+    else {
+        DisplayController.setTurnHeader(game.getCurrentPlayerName(), game.getTurn());
+    }
+})
+
+/**
+ * Player factory.
+ * Creates a player object with a display name and marker.
+ *
+ * @param {string} name - Raw player name from form input.
+ * @param {string} marker - Initial player marker ("X" or "O").
+ * @returns {{
+ *   getName: () => string,
+ *   getMarker: () => string,
+ *   setName: (name: string) => void,
+ *   toggleMarker: () => void
+ * }}
+ */
 const createPlayer = (name, marker) => {
     let currentName = "";
     let currentMarker = "";
@@ -41,8 +97,26 @@ const createPlayer = (name, marker) => {
     return {getName, getMarker, setName, toggleMarker};
 }
 
+/**
+ * Game factory.
+ * Encapsulates board state, turn state, and win checks for a single game.
+ *
+ * @param {string} player1Name - Player one name.
+ * @param {string} player2Name - Player two name.
+ * @returns {{
+ *   playRound: (index: number) => void,
+ *   checkWinner: () => boolean,
+ *   isGameOver: () => boolean,
+ *   getTurn: () => number,
+ *   getCurrentPlayerName: () => string,
+ *   getCurrentPlayerMarker: () => string,
+ *   toggleIsOver: () => void
+ * }}
+ */
 const Game = function(player1Name, player2Name) {
-    const winningCombos = new Set();
+    // All winning index triplets for a 3x3 Tic-Tac-Toe board.
+    const winningCombos = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]]
 
     const player1 = createPlayer(player1Name, MARKER_X);
     const player2 = createPlayer(player2Name, MARKER_O);
@@ -51,10 +125,20 @@ const Game = function(player1Name, player2Name) {
     let currentTurn = 1;
     let isOver = false;
 
-    //IIFE for GameBoard
+    /**
+     * Private game board module.
+     * Stores board cells and exposes safe mutation/read operations.
+     */
     const GameBoard = (() => {
         let gameBoard = Array(9).fill(null);
 
+        /**
+         * Places a marker at a board index if the slot is empty.
+         *
+         * @param {string} marker - Marker to place.
+         * @param {number} index - Board index (0-8).
+         * @returns {boolean} True when placement succeeds, else false.
+         */
         function placeMarker(marker, index) {
             if (gameBoard[index] === null) {
                 gameBoard[index] = marker;
@@ -65,36 +149,65 @@ const Game = function(player1Name, player2Name) {
             }
         }
 
+        /**
+         * Returns a copy of the current board state.
+         *
+         * @returns {(string | null)[]}
+         */
+        function getBoard() {
+            return [...gameBoard];
+        }
+
+        /**
+         * Resets board state to nine empty cells.
+         */
         function reset() {
             gameBoard = Array(9).fill(null);
         }
 
-        return {reset, placeMarker}
+        return {reset, placeMarker, getBoard};
     })();
 
     function playRound(index) {
+        // Only switches player when a valid move was made.
         if (GameBoard.placeMarker(currentPlayer.getMarker(), index)) {
-            if (currentPlayer === player1) {
-                currentPlayer = player2;
+            if (currentTurn === 9 || checkWinner()) {
+                isOver = true;
             }
-            else currentPlayer = player1;
+            else {
+                if (currentPlayer === player1) {
+                    currentPlayer = player2;
+                }
+                else currentPlayer = player1;
 
-            currentTurn++;
-        }
-
-        if (currentTurn === 9 || checkWinner()) {
-            isOver = true;
+                currentTurn++;
+            }
         }
     }
 
+    /**
+     * Checks whether current board contains a winning combination.
+     *
+     * @returns {boolean}
+     */
     function checkWinner() {
-        if () {
-            isOver = true;
+        const board = GameBoard.getBoard();
+
+        for (const [a, b, c] of winningCombos) {
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                return true
+            }
         }
+
+        return false;
     }
 
     function isGameOver() {
         return isOver;
+    }
+
+    function toggleIsOver() {
+        isOver = !isOver;
     }
 
     function getTurn() {
@@ -104,17 +217,29 @@ const Game = function(player1Name, player2Name) {
     function getCurrentPlayerName() {
         return currentPlayer.getName();
     }
-    return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName};
+
+    function getCurrentPlayerMarker() {
+        return currentPlayer.getMarker();
+    }
+
+    return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName, getCurrentPlayerMarker, toggleIsOver};
 }
 
-const createDisplayController = ((form, gameContainer, turnHeader) => {
-
-    const setVisible = (el, visible) => el.classList.toggle("hidden", !visible);
+/**
+ * UI module for toggling view state and updating header text.
+ */
+const DisplayController = (() => {
+    const setVisible = (element, visible) => element.classList.toggle("hidden", !visible);
 
     return {
         showGameBoard: () => setVisible(gameContainer, true),
         hideGameBoard: () => setVisible(gameContainer, false),
         showStartGameForm: () => setVisible(form, true),
+        changeWinnerDialogHeader (name, turn) {
+            console.log(winnerDialog.childNodes[0]);
+            winnerDialog.childNodes[0].textContent = `${name} won the game in ${turn} turns`;
+        },
+        shoeWinnerDialog: () => {winnerDialog.showModal()},
         hideStartGameForm: () => {
             form.reset();
             setVisible(form, false);
@@ -123,30 +248,7 @@ const createDisplayController = ((form, gameContainer, turnHeader) => {
             turnHeader.textContent = `Turn ${turn}: ${name}`;
         }
     };
-});
-
-const startGameButton = document.querySelector("#startGameButton");
-const form = document.querySelector(".startGameForm");
-const gameContainer = document.querySelector(".game-container");
-const turnHeader = document.querySelector(".player-turn");
-
-const displayController = createDisplayController(form, gameContainer, turnHeader);
-let game;
-
-startGameButton.addEventListener("click", (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-    console.log(formData.get("playerOneName"));
-    const player1Name = formData.get("playerOneName");
-    const player2Name = formData.get("playerTwoName");
-
-    game = new Game(player1Name, player2Name);
-
-    displayController.hideStartGameForm();
-    displayController.showGameBoard();
-    displayController.setTurnHeader(game.getCurrentPlayerName(), 1);
-})
+})();
 
 
 
