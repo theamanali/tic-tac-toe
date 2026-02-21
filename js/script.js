@@ -10,7 +10,6 @@ const winnerText = document.querySelector(".winner-text");
 
 let game;
 
-// Starts a new game from form input and updates the UI.
 startGameButton.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -25,7 +24,6 @@ startGameButton.addEventListener("click", (e) => {
     DisplayController.setTurnHeader(game.getCurrentPlayerName(), 1);
 })
 
-// Handles board clicks, applies a move, and checks for a winner.
 gameContainer.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -45,21 +43,14 @@ gameContainer.addEventListener("click", (e) => {
     }
 })
 
+winnerDialog.addEventListener("click", (e) => {
+    e.preventDefault();
 
+    if (e.target.classList.contains("restart-button-same")) {
 
-/**
- * Player factory.
- * Creates a player object with a display name and marker.
- *
- * @param {string} name - Raw player name from form input.
- * @param {string} marker - Initial player marker ("X" or "O").
- * @returns {{
- *   getName: () => string,
- *   getMarker: () => string,
- *   setName: (name: string) => void,
- *   toggleMarker: () => void
- * }}
- */
+    }
+})
+
 const createPlayer = (name, marker) => {
     let currentName = "";
     let currentMarker = "";
@@ -100,24 +91,7 @@ const createPlayer = (name, marker) => {
     return {getName, getMarker, setName, toggleMarker};
 }
 
-/**
- * Game factory.
- * Encapsulates board state, turn state, and win checks for a single game.
- *
- * @param {string} player1Name - Player one name.
- * @param {string} player2Name - Player two name.
- * @returns {{
- *   playRound: (index: number) => void,
- *   checkWinner: () => boolean,
- *   isGameOver: () => boolean,
- *   getTurn: () => number,
- *   getCurrentPlayerName: () => string,
- *   getCurrentPlayerMarker: () => string,
- *   toggleIsOver: () => void
- * }}
- */
 const Game = function(player1Name, player2Name) {
-    // All winning index triplets for a 3x3 Tic-Tac-Toe board.
     const winningCombos = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8],
         [0,4,8], [2,4,6]]
 
@@ -128,20 +102,9 @@ const Game = function(player1Name, player2Name) {
     let currentTurn = 1;
     let isOver = false;
 
-    /**
-     * Private game board module.
-     * Stores board cells and exposes safe mutation/read operations.
-     */
     const GameBoard = (() => {
         let gameBoard = Array(9).fill(null);
 
-        /**
-         * Places a marker at a board index if the slot is empty.
-         *
-         * @param {string} marker - Marker to place.
-         * @param {number} index - Board index (0-8).
-         * @returns {boolean} True when placement succeeds, else false.
-         */
         function placeMarker(marker, index) {
             if (gameBoard[index] === null) {
                 gameBoard[index] = marker;
@@ -152,18 +115,10 @@ const Game = function(player1Name, player2Name) {
             }
         }
 
-        /**
-         * Returns a copy of the current board state.
-         *
-         * @returns {(string | null)[]}
-         */
         function getBoard() {
             return [...gameBoard];
         }
 
-        /**
-         * Resets board state to nine empty cells.
-         */
         function reset() {
             gameBoard = Array(9).fill(null);
         }
@@ -172,7 +127,6 @@ const Game = function(player1Name, player2Name) {
     })();
 
     function playRound(index) {
-        // Only switches player when a valid move was made.
         if (GameBoard.placeMarker(currentPlayer.getMarker(), index)) {
             if (currentTurn === 9 || checkWinner()) {
                 isOver = true;
@@ -188,11 +142,6 @@ const Game = function(player1Name, player2Name) {
         }
     }
 
-    /**
-     * Checks whether current board contains a winning combination.
-     *
-     * @returns {boolean}
-     */
     function checkWinner() {
         const board = GameBoard.getBoard();
 
@@ -225,12 +174,13 @@ const Game = function(player1Name, player2Name) {
         return currentPlayer.getMarker();
     }
 
+    function resetGame(withNewPlayers) {
+
+    }
+
     return {playRound, checkWinner, isGameOver, getTurn, getCurrentPlayerName, getCurrentPlayerMarker, toggleIsOver};
 }
 
-/**
- * UI module for toggling view state and updating header text.
- */
 const DisplayController = (() => {
     const setVisible = (element, visible) => element.classList.toggle("hidden", !visible);
 
@@ -251,7 +201,6 @@ const DisplayController = (() => {
         }
     };
 })();
-
 
 
 
